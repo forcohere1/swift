@@ -147,7 +147,7 @@ export default function Home() {
 	return (
 		<>
 		<div className="flex flex-col justify-between w-screen h-screen bg-gray-50 dark:bg-gray-900 m-0 p-0 overflow-hidden">
-			<div className="w-full max-w-5xl mx-auto h-full flex flex-col">
+			<div className="w-full max-w-5xl mx-auto h-full flex flex-col p-6">
 			{/* Header */}
 			<header className="w-full bg-black text-white py-4 px-6 flex justify-between items-center shadow-lg">
 				<div className="flex items-center space-x-4">
