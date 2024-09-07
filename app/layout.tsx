@@ -5,10 +5,9 @@ import clsx from "clsx";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/react";
-import { ThemeProvider } from "next-themes"; // Import ThemeProvider
 
 export const metadata: Metadata = {
-	title: "Voicy",
+	title: "Swift",
 	description:
 		"A fast, open-source voice assistant powered by Groq, Cartesia, and Vercel.",
 };
@@ -20,22 +19,20 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<ThemeProvider attribute="class">
-				<body
-					className={clsx(
-						GeistSans.variable,
-						GeistMono.variable,
-						"py-8 px-6 lg:p-10 dark:text-white bg-white dark:bg-black min-h-dvh flex flex-col justify-between antialiased font-sans select-none"
-					)}
-				>
-					<main className="flex flex-col items-center justify-center grow">
-						{children}
-					</main>
+			<body
+				className={clsx(
+					GeistSans.variable,
+					GeistMono.variable,
+					"py-8 px-6 lg:p-10 dark:text-white bg-white dark:bg-black min-h-dvh flex flex-col justify-between antialiased font-sans select-none"
+				)}
+			>
+				<main className="flex flex-col items-center justify-center grow">
+					{children}
+				</main>
 
-					<Toaster richColors theme="system" />
-					<Analytics />
-				</body>
-			</ThemeProvider>
+				<Toaster richColors theme="system" />
+				<Analytics />
+			</body>
 		</html>
 	);
 }

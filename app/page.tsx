@@ -3,7 +3,7 @@
 import clsx from "clsx";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { EnterIcon, LoadingIcon } from "@/lib/icons";
+import { EnterIcon, LoadingIcon, MicOnIcon, MicOffIcon } from "@/lib/icons";
 import { usePlayer } from "@/lib/usePlayer";
 import { track } from "@vercel/analytics";
 import { useMicVAD, utils } from "@ricky0123/vad-react";
@@ -18,6 +18,17 @@ export default function Home() {
 	const [input, setInput] = useState("");
 	const inputRef = useRef<HTMLInputElement>(null);
 	const player = usePlayer();
+
+	const [isMicOn, setMicOn] = useState(true);
+
+	const toggleMic = () => {
+		if (isMicOn) {
+			vad.pause(); // Assuming `vad` is your mic handler for VAD
+		} else {
+			vad.start();
+		}
+		setMicOn(!isMicOn);
+	};
 
 	const vad = useMicVAD({
 		startOnLoad: true,
@@ -133,6 +144,13 @@ export default function Home() {
 		<>
 		<div className="flex flex-col justify-between w-screen min-h-screen bg-gray-50 dark:bg-gray-900">
 			<div className="w-full max-w-5xl mx-auto h-full flex flex-col">
+			<button
+				onClick={toggleMic}
+				className="fixed bottom-10 right-10 p-4 bg-gray-200 dark:bg-gray-700 rounded-full shadow-lg"
+				aria-label="Toggle Microphone"
+			>
+				{isMicOn ? <MicOnIcon /> : <MicOffIcon />}
+			</button>
 			{/* Chat Box Container */}
 			<div className="flex flex-col bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg p-4 h-[80vh] relative">
 				{/* Scrollable Messages */}
@@ -193,7 +211,7 @@ export default function Home() {
 			{/* Visual Speech Detection */}
 			<div
 			className={clsx(
-				"absolute bottom-10 right-10 w-40 h-40 blur-lg rounded-full bg-gradient-to-b from-red-200 to-red-400 dark:from-red-600 dark:to-red-800 transition ease-in-out",
+				"absolute bottom-10 right-10 w-40 h-40 blur-lg rounded-full bg-gradient-to-b from-red-100 to-red-300 dark:from-red-600 dark:to-red-800 transition ease-in-out",
 				{
 				"opacity-0": vad.loading || vad.errored,
 				"opacity-30": !vad.loading && !vad.errored && !vad.userSpeaking,
