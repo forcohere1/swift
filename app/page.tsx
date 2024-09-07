@@ -148,8 +148,18 @@ export default function Home() {
 		<>
 		<div className="flex flex-col justify-between w-screen min-h-screen bg-gray-50 dark:bg-gray-900">
 			<div className="w-full max-w-5xl mx-auto h-full flex flex-col">
+				
+			{/* Header */}
+			<header className="w-full bg-black text-white py-4 px-6 flex justify-between items-center shadow-lg">
+				<div className="flex items-center space-x-4">
+					{/* Logo */}
+					<img src="logos/android-chrome-192x192.png" alt="Voicy Logo" className="h-10 w-10" />
+					{/* Name */}
+					<h1 className="text-2xl font-medium">Voicy</h1>
+				</div>
+			</header>
 			{/* Chat Box Container */}
-			<div className="flex flex-col bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg p-4 h-[80vh] relative">
+			<div className="flex flex-col bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg p-4 h-[70vh] relative">
 				{/* Scrollable Messages */}
 				<div className="overflow-y-auto flex-grow p-4 mb-2">
 				{messages.length > 0 ? (
@@ -176,7 +186,7 @@ export default function Home() {
 					))
 				) : (
 					<p className="text-gray-500 dark:text-gray-400">
-					Start a conversation by typing or speaking.
+					Start a conversation by typing or speaking...
 					</p>
 				)}
 				</div>
