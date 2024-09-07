@@ -37,9 +37,10 @@ export function EnterIcon() {
 	);
 }
 
-export function MicOnIcon() {
+export function MicOnIcon({ className }: { className?: string }) {
 	return (
 		<svg
+			className={className} // Apply className prop here
 			xmlns="http://www.w3.org/2000/svg"
 			width="24"
 			height="24"
@@ -55,9 +56,10 @@ export function MicOnIcon() {
 	);
 }
 
-export function MicOffIcon() {
+export function MicOffIcon({ className }: { className?: string }) {
 	return (
 		<svg
+			className={className} // Apply className prop here
 			xmlns="http://www.w3.org/2000/svg"
 			width="24"
 			height="24"

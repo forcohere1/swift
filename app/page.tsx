@@ -18,20 +18,10 @@ export default function Home() {
 	const [input, setInput] = useState("");
 	const inputRef = useRef<HTMLInputElement>(null);
 	const player = usePlayer();
-
-	const [isMicOn, setMicOn] = useState(true);
-
-	const toggleMic = () => {
-		if (isMicOn) {
-			vad.pause(); // Assuming `vad` is your mic handler for VAD
-		} else {
-			vad.start();
-		}
-		setMicOn(!isMicOn);
-	};
+	const [micOn, setMicOn] = useState(true); // State to track mic on/off
 
 	const vad = useMicVAD({
-		startOnLoad: true,
+		startOnLoad: true, // Starts VAD automatically
 		onSpeechEnd: (audio) => {
 			player.stop();
 			const wav = utils.encodeWAV(audio);
@@ -61,6 +51,20 @@ export default function Home() {
 			};
 		},
 	});
+
+	// Handle mic on/off toggle
+	const toggleMic = () => {
+		setMicOn((prevMicOn) => !prevMicOn); // Toggle between true/false
+	};
+
+	// Effect to start/stop VAD based on mic state
+	useEffect(() => {
+		if (micOn) {
+			vad.start(); // Start VAD when mic is on
+		} else {
+			vad.pause(); // Pause VAD when mic is off
+		}
+	}, [micOn, vad]);
 
 	useEffect(() => {
 		function keyDown(e: KeyboardEvent) {
@@ -144,13 +148,6 @@ export default function Home() {
 		<>
 		<div className="flex flex-col justify-between w-screen min-h-screen bg-gray-50 dark:bg-gray-900">
 			<div className="w-full max-w-5xl mx-auto h-full flex flex-col">
-			<button
-				onClick={toggleMic}
-				className="fixed bottom-10 right-10 p-4 bg-gray-200 dark:bg-gray-700 rounded-full shadow-lg"
-				aria-label="Toggle Microphone"
-			>
-				{isMicOn ? <MicOnIcon /> : <MicOffIcon />}
-			</button>
 			{/* Chat Box Container */}
 			<div className="flex flex-col bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg p-4 h-[80vh] relative">
 				{/* Scrollable Messages */}
@@ -185,33 +182,50 @@ export default function Home() {
 				</div>
 			</div>
 			{/* Input Field - Fixed */}
-			<form
-				onSubmit={handleFormSubmit}
-				className="w-full max-w-5xl mx-auto flex items-center bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-full shadow-md px-4 py-2 mt-2"
-			>
-				<input
-				type="text"
-				className="bg-transparent focus:outline-none p-2 w-full text-black dark:text-white"
-				placeholder="Type your message here..."
-				value={input}
-				onChange={(e) => setInput(e.target.value)}
-				ref={inputRef}
-				/>
-				<button
-				type="submit"
-				className="text-neutral-700 hover:text-black dark:text-neutral-300 dark:hover:text-white"
-				disabled={isPending}
-				aria-label="Submit"
-				>
-				{isPending ? <LoadingIcon /> : <EnterIcon />}
+			{/* Input Field with Mic Icon */}
+			<div className="w-full max-w-5xl mx-auto flex items-center space-x-2 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-full shadow-md px-4 py-2 mt-2">
+            
+            {/* Mic Icon - Click to toggle */}
+
+			<button onClick={toggleMic} className="relative group" aria-label="Toggle Mic">
+				{micOn ? (
+					<MicOnIcon className="w-4 h-4 fill-black dark:fill-white" />
+				) : (
+					<MicOffIcon className="w-5 h-5 fill-black dark:fill-white" />
+				)}
+
+				{/* Tooltip */}
+				<span className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs text-white bg-gray-800 dark:bg-gray-700 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+					{micOn ? "Mute Mic" : "Unmute Mic"}
+				</span>
 				</button>
-			</form>
+
+            {/* Input Field */}
+            <form onSubmit={handleFormSubmit} className="flex-grow flex items-center">
+              <input
+                type="text"
+                className="bg-transparent focus:outline-none p-2 w-full text-black dark:text-white"
+                placeholder="Type your message here..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                ref={inputRef}
+              />
+              <button
+                type="submit"
+                className="text-neutral-700 hover:text-black dark:text-neutral-300 dark:hover:text-white"
+                disabled={isPending}
+                aria-label="Submit"
+              >
+                {isPending ? <LoadingIcon /> : <EnterIcon />}
+              </button>
+            </form>
+          </div>
 			</div>
 
 			{/* Visual Speech Detection */}
 			<div
 			className={clsx(
-				"absolute bottom-10 right-10 w-40 h-40 blur-lg rounded-full bg-gradient-to-b from-red-100 to-red-300 dark:from-red-600 dark:to-red-800 transition ease-in-out",
+				"absolute bottom-10 right-10 w-40 h-40 blur-lg rounded-full bg-gradient-to-b from-red-200 to-red-400 dark:from-red-600 dark:to-red-800 transition ease-in-out",
 				{
 				"opacity-0": vad.loading || vad.errored,
 				"opacity-30": !vad.loading && !vad.errored && !vad.userSpeaking,
@@ -221,14 +235,5 @@ export default function Home() {
 			/>
 		</div>
 		</>
-	);
-}
-
-function A(props: any) {
-	return (
-		<a
-			{...props}
-			className="text-neutral-500 dark:text-neutral-500 hover:underline font-medium"
-		/>
 	);
 }
