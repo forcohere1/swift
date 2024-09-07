@@ -29,6 +29,9 @@ importers:
       icons:
         specifier: link:@/lib/icons
         version: link:@/lib/icons
+      lucide-react:
+        specifier: ^0.439.0
+        version: 0.439.0(react@19.0.0-rc-100dfd7dab-20240701)
       next:
         specifier: 15.0.0-rc.0
         version: 15.0.0-rc.0(react-dom@19.0.0-rc-100dfd7dab-20240701(react@19.0.0-rc-100dfd7dab-20240701))(react@19.0.0-rc-100dfd7dab-20240701)
@@ -1291,6 +1294,11 @@ packages:
   lru-cache@10.2.2:
     resolution: {integrity: sha512-9hp3Vp2/hFQUiIwKo8XCeFVnrg8Pk3TYNPIR7tJADKi5YfcF7vEaK7avFHTlSy3kOKYaJQaalfEo6YuXdceBOQ==}
     engines: {node: 14 || >=16.14}
+
+  lucide-react@0.439.0:
+    resolution: {integrity: sha512-PafSWvDTpxdtNEndS2HIHxcNAbd54OaqSYJO90/b63rab2HWYqDbH194j0i82ZFdWOAcf0AHinRykXRRK2PJbw==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc
 
   md5@2.3.0:
     resolution: {integrity: sha512-T1GITYmFaKuO91vxyoQMFETst+O71VUPEU3ze5GNzDm0OWdP8v1ziTaAEPUr/3kLsY3Sftgz242A1SetQiDL7g==}
@@ -3259,6 +3267,10 @@ snapshots:
       js-tokens: 4.0.0
 
   lru-cache@10.2.2: {}
+
+  lucide-react@0.439.0(react@19.0.0-rc-100dfd7dab-20240701):
+    dependencies:
+      react: 19.0.0-rc-100dfd7dab-20240701
 
   md5@2.3.0:
     dependencies:

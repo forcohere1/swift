@@ -7,6 +7,7 @@ import { EnterIcon, LoadingIcon, MicOnIcon, MicOffIcon } from "@/lib/icons";
 import { usePlayer } from "@/lib/usePlayer";
 import { track } from "@vercel/analytics";
 import { useMicVAD, utils } from "@ricky0123/vad-react";
+import ThemeToggle from "./components/ThemeToggle";
 
 type Message = {
 	role: "user" | "assistant";
@@ -146,10 +147,22 @@ export default function Home() {
 
 	return (
 		<>
-		<div className="flex flex-col justify-between w-screen h-screen bg-gray-50 dark:bg-gray-900 m-0 p-0 overflow-hidden">
+		<div className="flex flex-col justify-between w-screen h-screen bg-gray-50 dark:bg-gray-900 m-0 p-0 overflow-hidden pt-7">
 			<div className="w-full max-w-5xl mx-auto h-full flex flex-col p-6">
+			
+		{/* Theme Toggle - Positioned Top Right */}
+		<div className="absolute top-4 right-4 group">
+			{/* Remove outer <button> if ThemeToggle is already a button */}
+			<ThemeToggle />
+			{/* Tooltip */}
+			<span className="absolute right-full mr-2 top-1/2 transform -translate-y-1/2 px-2 py-1 text-xs text-white bg-gray-800 dark:bg-gray-700 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+				Toggle Theme
+			</span>
+		</div>
+
+				
 			{/* Header */}
-			<header className="w-full bg-black text-white py-4 px-6 flex justify-between items-center shadow-lg">
+			<header className="w-full bg-white dark:bg-gray-700 text-black dark:text-white py-4 px-6 flex justify-between items-center shadow-lg rounded border border-gray-300 dark:border-gray-700">
 				<div className="flex items-center space-x-4">
 					{/* Logo */}
 					<img src="logos/android-chrome-192x192.png" alt="Voicy Logo" className="h-10 w-10" />
@@ -157,6 +170,8 @@ export default function Home() {
 					<h1 className="text-2xl font-medium">Voicy</h1>
 				</div>
 			</header>
+
+			
 			{/* Chat Box Container */}
 			<div className="flex flex-col bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg p-4 h-[70vh] relative">
 				{/* Scrollable Messages */}
@@ -191,48 +206,53 @@ export default function Home() {
 				</div>
 			</div>
 			{/* Input Field - Fixed */}
-			{/* Input Field with Mic Icon */}
-			<div className="w-full max-w-5xl mx-auto flex items-center space-x-2 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-full shadow-md px-4 py-2 mt-2">
-            
-            {/* Mic Icon - Click to toggle */}
-
-			<button onClick={toggleMic} className="relative group" aria-label="Toggle Mic">
-				{micOn ? (
-					<MicOnIcon className="w-4 h-4 fill-black dark:fill-white" />
-				) : (
-					<MicOffIcon className="w-5 h-5 fill-black dark:fill-white" />
+			<div
+				className={clsx(
+					"w-full max-w-5xl mx-auto flex items-center space-x-2 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-full shadow-md px-4 py-2 mt-2 relative",
+					{
+						"animated-wave-container": !vad.loading && !vad.errored && vad.userSpeaking, // Apply animation only when speaking
+					}
 				)}
+			>
+				{/* Mic Icon - Click to toggle */}
+				<button onClick={toggleMic} className="relative group" aria-label="Toggle Mic">
+					{micOn ? (
+						<MicOnIcon className="w-4 h-4 fill-black dark:fill-white" />
+					) : (
+						<MicOffIcon className="w-5 h-5 fill-black dark:fill-white" />
+					)}
 
-				{/* Tooltip */}
-				<span className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs text-white bg-gray-800 dark:bg-gray-700 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-					{micOn ? "Mute Mic" : "Unmute Mic"}
-				</span>
+					{/* Tooltip */}
+					<span className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs text-white bg-gray-800 dark:bg-gray-700 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+						{micOn ? "Mute Mic" : "Unmute Mic"}
+					</span>
 				</button>
 
-            {/* Input Field */}
-            <form onSubmit={handleFormSubmit} className="flex-grow flex items-center">
-              <input
-                type="text"
-                className="bg-transparent focus:outline-none p-2 w-full text-black dark:text-white"
-                placeholder="Type your message here..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                ref={inputRef}
-              />
-              <button
-                type="submit"
-                className="text-neutral-700 hover:text-black dark:text-neutral-300 dark:hover:text-white"
-                disabled={isPending}
-                aria-label="Submit"
-              >
-                {isPending ? <LoadingIcon /> : <EnterIcon />}
-              </button>
-            </form>
-          </div>
+				{/* Input Field */}
+				<form onSubmit={handleFormSubmit} className="flex-grow flex items-center">
+					<input
+						type="text"
+						className="bg-transparent focus:outline-none p-2 w-full text-black dark:text-white"
+						placeholder="Type your message here..."
+						value={input}
+						onChange={(e) => setInput(e.target.value)}
+						ref={inputRef}
+					/>
+					<button
+						type="submit"
+						className="text-neutral-700 hover:text-black dark:text-neutral-300 dark:hover:text-white"
+						disabled={isPending}
+						aria-label="Submit"
+					>
+						{isPending ? <LoadingIcon /> : <EnterIcon />}
+					</button>
+				</form>
+			</div>
+
 			</div>
 
 			{/* Visual Speech Detection */}
-			<div
+			{/* <div
 			className={clsx(
 				"absolute bottom-10 right-10 w-40 h-40 blur-lg rounded-full bg-gradient-to-b from-red-200 to-red-400 dark:from-red-600 dark:to-red-800 transition ease-in-out",
 				{
@@ -241,7 +261,7 @@ export default function Home() {
 				"opacity-100 scale-110": vad.userSpeaking,
 				}
 			)}
-			/>
+			/>  */}
 		</div>
 		</>
 	);

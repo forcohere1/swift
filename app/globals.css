@@ -2,18 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
-    box-sizing: border-box;
-    background-color: transparent;
-}
 
-.main-container {
-    margin: 0;
-    padding: 0;
-    height: 100vh; /* Ensure it takes the full height */
-}
+/* CSS Keyframe for Wave Animation */
 
+@keyframes wave-animation {
+    0% {
+      border-color: red;
+      box-shadow: 0 0 8px 2px rgba(255, 0, 0, 0.5);
+    }
+    25% {
+      border-color: orange;
+      box-shadow: 0 0 8px 2px rgba(255, 165, 0, 0.5);
+    }
+    50% {
+      border-color: yellow;
+      box-shadow: 0 0 8px 2px rgba(255, 255, 0, 0.5);
+    }
+    75% {
+      border-color: green;
+      box-shadow: 0 0 8px 2px rgba(0, 128, 0, 0.5);
+    }
+    100% {
+      border-color: red;
+      box-shadow: 0 0 8px 2px rgba(255, 0, 0, 0.5);
+    }
+  }
+  
+  /* Animated Wave Border around Input Container */
+  .animated-wave-container {
+    position: relative;
+    border: 2px solid;
+    animation: wave-animation 3s infinite;
+  }
+  
